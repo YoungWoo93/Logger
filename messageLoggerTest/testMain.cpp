@@ -13,6 +13,7 @@
 #endif
 
 #include "../MessageLogger/MessageLogger.h"
+#include "MessageLogger/MessageLogger/MessageLoggerLegacy.h"
 #include "Profiler/Profiler/Profiler.h"
 
 #include <iostream>
@@ -20,7 +21,7 @@
 
 #include <stdio.h>
 #include <Windows.h>
-
+#include <thread>
 using namespace std;
 
 void asyncIOtest(const char* str)
@@ -123,13 +124,139 @@ void loggingLevelTest()
 	LOG(logLevel::Off, LO_CMD | LO_TXT, to_string(i)); // -1
 }
 
+
+
+#define threadCount 8
+unsigned logger1Proc(void* arg)
+{
+	for (int i = 0; i < 1024; i++)
+	{
+		LOG_LEGACY(logLevel::Fatal, LO_TXT, "test" + to_string(i) + "\t" + to_string(123));
+		//LOGOUT(logLevel::Fatal, LO_TXT) << "test" << i << "\t" << 123 << LOGEND;
+		
+		//while (saveLog());
+	}
+
+	return 0;
+}
+void logger1_test()
+{
+	HANDLE ts[threadCount];
+	for (int i = 0; i < threadCount; i++)
+	{
+		ts[i] = (HANDLE)_beginthreadex(nullptr, 0, logger1Proc, nullptr, CREATE_SUSPENDED, nullptr);
+	}
+	scopeProfiler s("lagacy logger1");
+	for (int i = 0; i < threadCount; i++)
+	{
+		ResumeThread(ts[i]);
+	}
+	WaitForMultipleObjects(threadCount, ts, true, INFINITE);
+	for (int i = 0; i < threadCount; i++)
+	{
+		CloseHandle(ts[i]);
+	}
+}
+
+unsigned logger2Proc(void* arg)
+{
+	for (int i = 0; i < 1024; i++)
+	{
+		//LOG(logLevel::Fatal, LO_TXT, "test" + to_string(i) + "\t" + to_string(123));
+		LOG2(logLevel::Fatal, LO_TXT, "test" + to_string(i) + "\t" + to_string(123));
+		//LOGOUT(logLevel::Fatal, LO_TXT) << "test" << i << "\t" << 123 << LOGEND;
+		//LOGOUT_EX(logLevel::Fatal, LO_TXT, "tergetFile") << "test" << i << "\t" << 123 << LOGEND;
+	}
+
+	return 0;
+}
+void logger2_test()
+{
+	HANDLE ts[threadCount];
+	for (int i = 0; i < threadCount; i++)
+	{
+		ts[i] = (HANDLE)_beginthreadex(nullptr, 0, logger2Proc, nullptr, CREATE_SUSPENDED, nullptr);
+	}
+	scopeProfiler s("remake stream logger2");
+	for (int i = 0; i < threadCount; i++)
+	{
+		ResumeThread(ts[i]);
+	}
+	WaitForMultipleObjects(threadCount, ts, true, INFINITE);
+	for (int i = 0; i < threadCount; i++)
+	{
+		CloseHandle(ts[i]);
+	}
+}
+
+unsigned logger3Proc(void* arg)
+{
+	for (int i = 0; i < 1024; i++)
+	{
+		//LOG(logLevel::Fatal, LO_TXT, "test" + to_string(i) + "\t" + to_string(123));
+		//LOG2(logLevel::Fatal, LO_TXT, "test" + to_string(i) + "\t" + to_string(123));
+		LOGOUT(logLevel::Fatal, LO_TXT) << "test" << i << "\t" << 123 << LOGEND;
+		//LOGOUT_EX(logLevel::Fatal, LO_TXT, "tergetFile") 
+		//	<< "test" 
+		//	<< i 
+		//	<< "\t" 
+		//	<< 123 
+		//	<< LOGEND;
+	}
+
+	return 0;
+}
+void logger3_test()
+{
+	HANDLE ts[threadCount];
+	for (int i = 0; i < threadCount; i++)
+	{
+		ts[i] = (HANDLE)_beginthreadex(nullptr, 0, logger2Proc, nullptr, CREATE_SUSPENDED, nullptr);
+	}
+	scopeProfiler s("remake fast logger3");
+	for (int i = 0; i < threadCount; i++)
+	{
+		ResumeThread(ts[i]);
+	}
+	WaitForMultipleObjects(threadCount, ts, true, INFINITE);
+	for (int i = 0; i < threadCount; i++)
+	{
+		CloseHandle(ts[i]);
+	}
+}
+
+#include <sstream>
+
 void main()
 {
-	loggerInit("level test, Warning", logLevel::Warning);
-	for (;;)
-	{
-		loggingLevelTest();
-	}
-	Sleep(110);
+	string s = "123456789123456789123456789123456789123456789123456789";
+	auto c = __FILE__;
+	int t = __LINE__;
+	std::cout << sizeof(__FILE__);
+	loggerInit("level test, Warning", logLevel::All);
 	
+	for (int i = 0; i < 1; i++)
+	{
+		logger1_test();
+		logger2_test();
+		Sleep(10000);
+		//logger3_test();
+		//Sleep(10000);
+	}
+	for (int i=0; i<10; i++)
+	{
+		cout << i << endl;
+		{
+			logger1_test();
+		}
+		Sleep(5000);
+		{
+			logger2_test();
+		}
+		Sleep(5000);
+		{
+			//logger3_test();
+		}
+		//Sleep(10000);
+	}
 }

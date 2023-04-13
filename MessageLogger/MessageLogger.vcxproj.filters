@@ -13,15 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\v2.0">
+      <UniqueIdentifier>{a6623e09-51bc-49d3-b63d-5189821f1738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\v1.0">
+      <UniqueIdentifier>{9e10dd60-5f39-41eb-8cc6-eae9f0fbaaaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\temp">
+      <UniqueIdentifier>{32fac122-deaa-4c30-84d6-e5808410552c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MessageLogger.v.1.0.cpp">
+      <Filter>소스 파일\v1.0</Filter>
+    </ClCompile>
+    <ClCompile Include="logMessage.cpp">
+      <Filter>소스 파일\v2.0</Filter>
+    </ClCompile>
+    <ClCompile Include="logger.cpp">
+      <Filter>소스 파일\v2.0</Filter>
+    </ClCompile>
     <ClCompile Include="MessageLogger.cpp">
+      <Filter>소스 파일\v2.0</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLogger.v.2.0.cpp">
+      <Filter>소스 파일\temp</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageLogger.v.2.1.cpp">
+      <Filter>소스 파일\temp</Filter>
+    </ClCompile>
+    <ClCompile Include="temp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MessageLogger.v.1.0.h">
+      <Filter>소스 파일\v1.0</Filter>
+    </ClInclude>
+    <ClInclude Include="logMessage.h">
+      <Filter>소스 파일\v2.0</Filter>
+    </ClInclude>
+    <ClInclude Include="logger.h">
+      <Filter>소스 파일\v2.0</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLogger.v.2.0.h">
+      <Filter>소스 파일\temp</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLogger.v.2.1.h">
+      <Filter>소스 파일\temp</Filter>
+    </ClInclude>
     <ClInclude Include="MessageLogger.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageLoggerLegacy.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
